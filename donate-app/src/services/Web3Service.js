@@ -6,7 +6,7 @@ const ADRESSCONTRACT = "0xc3F8167FfdA2A44944690047D425499d6f9E3217";
 export async function doLogin() {
 
     //verificar se o metamask está instalado
-    if(!window.ethereum) throw new Error("No metamask installed");
+    if(!window.ethereum) throw new Error("No metamask installed!!");
     
     //conectar ao metamask
     const web3 = new Web3(window.ethereum);

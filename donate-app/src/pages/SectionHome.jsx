@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Container, ContaineBtn, Img, Description, H1, P, Span } from "../css/sectionHomeStyles"; // Importando o botão estilizado de outro arquivo
+import { Button, Container, ContaineBtn, Img, Description, BtnDiv, P, Span } from "../css/sectionHomeStyles"; // Importando o botão estilizado de outro arquivo
 import { doLogin } from "@/services/Web3Service";
 import Header from "../app/components/header/Header";
 import Link from "next/link";
@@ -31,11 +31,13 @@ const SectionHome = () => {
       {!wallet ? (
         <Container>
           <Header />
-          <p>{wallet}</p>
-          <p>{error}</p>
-          <Button size="large" onClick={connectWallet}>
+          <P>{wallet}</P>
+          <P>{error}</P>
+          <BtnDiv>
+            <Button size="large" onClick={connectWallet}>
             <Img src="/icon/metamask1.png" alt="" /> Conect Wallet!
           </Button>
+          </BtnDiv>
           <Footer />
         </Container>
       ) : (

@@ -4,6 +4,8 @@ import { Color } from "../../GlobalStyles";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   height: 100vh;
   width: 100%;
 `;
@@ -26,6 +28,7 @@ export const Button = styled.button`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  
   background: linear-gradient(
     to bottom,
     rgba(156, 197, 161, .4),
@@ -77,4 +80,8 @@ export const P = styled.p`
 export const Span = styled.span`
 color: green;
 text-decoration: underline;
+`;
+
+export const BtnDiv = styled.div`
+padding-bottom: 250px;
 `;
