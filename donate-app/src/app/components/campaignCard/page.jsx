@@ -1,3 +1,6 @@
+"use client";
+import { createContext } from "react";
+
 import React from "react";
 import { Content, Status, Img } from "./styles";
 
