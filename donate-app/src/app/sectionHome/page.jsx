@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { Button, Container, ContaineBtn, Img, Description, BtnDiv, P, Span, DivCard } from "../../css/sectionHomeStyles";
 import { doLogin, getLastCampaignId, getCampaign } from "@/services/Web3Service"; // Importe suas funções Web3
