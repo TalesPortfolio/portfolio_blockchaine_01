@@ -5,10 +5,11 @@ import React from "react";
 import { Content, Status, Img } from "./styles";
 
 const CampaignCard = ({ campaign }) => {
-  const shortDescription =
-    campaign.description.length > 400
-      ? `${campaign.description.substring(0, 400)}...`
-      : campaign.description;
+  const shortDescription = campaign.description
+  ? campaign.description.length > 400
+    ? `${campaign.description.substring(0, 400)}...`
+    : campaign.description
+  : "No description available";
   return (
     <Content>
       <h2>{campaign.title}</h2>
