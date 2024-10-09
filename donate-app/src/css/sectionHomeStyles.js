@@ -7,7 +7,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 100vh;
-  width: 100%;
+  width: 100vw;
 `;
 
 export const ContaineBtn = styled.div`
@@ -85,3 +85,25 @@ text-decoration: underline;
 export const BtnDiv = styled.div`
 padding-bottom: 250px;
 `;
+
+export const DivCard = styled.div`
+  display: flex;
+  flex-wrap: wrap; /* Permite que os cards quebrem para a próxima linha */
+  justify-content: center;
+  gap: 20px;
+  padding-top: 30px;
+  
+  /* Cada card ocupará 48% da largura do container para garantir 2 por linha */
+  > div {
+    width: 48%;
+    max-width: 500px; /* Limita o tamanho máximo dos cards */
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 768px) {
+    /* Para dispositivos móveis, ajusta para 1 card por linha */
+    > div {
+      width: 100%;
+    }
+  }
+  `;

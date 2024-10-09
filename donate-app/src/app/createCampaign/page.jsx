@@ -1,7 +1,8 @@
+"use client";
 import React from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { addCampaign, getLastCampaignId } from "@/services/Web3Service";
+import { addCampaign, getLastCampaignId } from "../../services/Web3Service";
 import { useState } from "react";
 import {
   Container,
@@ -10,8 +11,8 @@ import {
   InputDiv,
   MessageDiv,
   BtnReturn,
-} from "../css/campaignStyles";
-import GlobalStyles from "../../GlobalStyles";
+} from "../../css/campaignStyles";
+import GlobalStyles from "../../../GlobalStyles";
 
 const Campaign = () => {
   const [campaign, setCampain] = useState({});

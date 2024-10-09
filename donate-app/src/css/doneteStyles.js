@@ -6,8 +6,6 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
- 
-  padding-top: 30px;
 `;
 
 export const SearchDiv = styled.div`
@@ -67,3 +65,31 @@ export const Input = styled.input`
   }
 
   `;
+export const Span = styled.span`
+  padding-top: 50px;
+`;  
+
+export const Container2 = styled.div`
+height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: space-between;
+`; 
+
+export const BtnReturn = styled.div`
+  height: 40px;
+  width: 300px;
+  margin: 5px;
+  background-color: rgba(156, 197, 161, 0.4);
+  color: ${Color.paragrafo};
+  font-size: 1.3rem;
+  font-weight: 700;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(181, 147, 0, 0.5);
+  }
+`;

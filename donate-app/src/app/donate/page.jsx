@@ -1,10 +1,13 @@
+"use client";
+
 import React, { useState } from "react";
 import Head from "next/head";
+import Link from "next/link";
 import { getCampaign, donate } from "@/services/Web3Service";
-import { Container, SearchDiv } from "../css/doneteStyles";
-import GlobalStyles from "../../GlobalStyles";
-import Footer from "../app/components/footer/Footer";
-import { P,H1,Input,DivInput } from "@/css/doneteStyles";
+import { Container, Container2,SearchDiv } from "../../css/doneteStyles";
+import GlobalStyles from "../../../GlobalStyles";
+import Footer from "../components/footer/Footer";
+import { P,H1,Input,DivInput,Span,BtnReturn } from "@/css/doneteStyles";
 
 const Donate = () => {
   const [campaign, setCampain] = useState({});
@@ -61,19 +64,23 @@ const Donate = () => {
               <div>
                 <h1>Donate Crypto</h1>
                 <h2>What is the campaign ID you are looking for?</h2>
-                <input
-                  type="number"
+                <Input
+                  type="number"BtnReturn
                   id="campaignId"
                   onChange={onChangeId}
                   value={campaign.id}
                 />
-                <input type="button" value="Search" onClick={btnSearchClick} />
+                <Input type="button" value="Search" onClick={btnSearchClick} />
+                <BtnReturn>
+              <Link href="/">Return</Link>
+            </BtnReturn>
               </div>
               <Footer />
             </SearchDiv>
           </>
         ) : (
-          <Container>
+          <Container2>
+            <Span/>
             <H1>
               Please check if this is the right campaign before finalizing your
               donation.
@@ -133,9 +140,11 @@ const Donate = () => {
                 </div>
               </div>
             </div>
-          </Container>
+             {message ? <P>{message}</P> : null}
+            <Footer />
+          </Container2>
         )}
-        {message ? <P>{message}</P> : null}
+       
       </Container>
     </>
   );

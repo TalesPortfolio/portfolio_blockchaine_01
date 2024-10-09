@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Color } from "../../GlobalStyles";
 
 export const Footer = styled.section`
-  width: 100%;
+  width: 100vw;
   text-align: center;
   background: linear-gradient(
     to bottom,
