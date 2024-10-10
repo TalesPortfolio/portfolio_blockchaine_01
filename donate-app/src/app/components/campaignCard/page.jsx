@@ -1,20 +1,23 @@
 "use client";
 import { createContext } from "react";
-
 import React from "react";
 import { Content, Status, Img } from "./styles";
 
-const CampaignCard = ({ campaign }) => {
+const CampaignCard = ({ campaign = {} }) => {
   const shortDescription = campaign.description
-  ? campaign.description.length > 400
-    ? `${campaign.description.substring(0, 400)}...`
-    : campaign.description
-  : "No description available";
+    ? campaign.description.length > 400
+      ? `${campaign.description.substring(0, 400)}...`
+      : campaign.description
+    : "No description available";
+
   return (
     <Content>
-      <h2>{campaign.title}</h2>
+      <h2>{campaign.title || "Untitled Campaign"}</h2>
       <p>{shortDescription}</p>
-      <Img src={campaign.imageUrl || "https://via.placeholder.com/300x200"} alt={campaign.title} />
+      <Img
+        src={campaign.imageUrl || "https://via.placeholder.com/300x200"}
+        alt={campaign.title || "Campaign Image"}
+      />
       <Status active={campaign.active}>
         {campaign.active ? "Active" : "Inactive"}
       </Status>
@@ -23,3 +26,4 @@ const CampaignCard = ({ campaign }) => {
 };
 
 export default CampaignCard;
+
