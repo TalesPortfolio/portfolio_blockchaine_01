@@ -46,3 +46,5 @@ background-size: cover;
 `;
 
 export default GlobalStyles;
+
+/*fazendo um teste no vercel*/
