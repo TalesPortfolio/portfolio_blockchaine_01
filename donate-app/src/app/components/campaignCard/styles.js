@@ -10,8 +10,8 @@ export const Content = styled.div`
     rgba(156, 197, 161, 1),
     rgba(234, 243, 236, 0)
   );
-  width: 500px;
-  height: 450px;
+  width: 500px !important;
+  height: 400px;
   border: 1px solid #ccc;
   border-radius: 8px;
   overflow: auto; /* Adiciona a barra de rolagem */
