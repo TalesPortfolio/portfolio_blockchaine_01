@@ -58,7 +58,7 @@ export const Button = styled.button`
 `;
 
 export const Img = styled.img`
-  width: 40px;
+  width: 40px !important;
 `;
 
 export const Description = styled.div`
