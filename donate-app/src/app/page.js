@@ -1,6 +1,6 @@
 "use client";
 import Head from "next/head";
-import GlobalStyles from "../../GlobalStyles";
+import GlobalStyles from "../css/GlobalStyles";
 import SectionHome from "../../src/app/sectionHome/page";
 
 export default function Home() {

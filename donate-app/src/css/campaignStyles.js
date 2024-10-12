@@ -11,8 +11,11 @@ export const Container = styled.div`
   width: 100vw;
   height: 100vh;
   background: url("/image.jpg") no-repeat center center fixed;
-
   background-size: cover;
+  @media (min-width: 300px) and (max-width: 768px){
+    background: none;
+    align-items: center;
+  }
 `;
 
 export const FormDiv = styled.div`
@@ -25,6 +28,13 @@ export const FormDiv = styled.div`
     color: black;
     font-size: 2.5rem;
   }
+  @media (min-width: 300px) and (max-width: 768px){
+    width: auto;
+    h1{
+      font-size: 1.2rem;
+    }
+  }
+ 
 `;
 
 export const Form = styled.form`
@@ -52,6 +62,29 @@ export const Form = styled.form`
     border: 1px solid black;
     border-radius: 10px;
     font-size: 1.3rem;
+  }
+  @media (min-width: 300px) and (max-width: 768px){
+    width: auto;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    input {
+      width: 100%;
+      height: 40px;
+      border: 1px solid black;
+      border-radius: 10px;
+      border: 1px solid black;
+      font-size: 1rem;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin: 5px;
+      padding: 5px;
+      border: 1px solid black;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
   }
 `;
 
@@ -81,6 +114,9 @@ export const MessageDiv = styled.div`
 height: 150px;
 width: 600px;
 color:black;
+@media (min-width: 300px) and (max-width: 768px){
+  width: auto;
+}
 `;
 
 export const BtnReturn = styled.div`

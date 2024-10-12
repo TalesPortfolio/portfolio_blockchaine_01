@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { getCampaign, donate } from "@/services/Web3Service";
-import { Container, Container2,SearchDiv } from "../../css/doneteStyles";
-import GlobalStyles from "../../../GlobalStyles";
+import { Container, Container2, SearchDiv } from "../../css/doneteStyles";
+import GlobalStyles from "../../css/GlobalStyles";
 import Footer from "../components/footer/Footer";
-import { P,H1,Input,DivInput,Span,BtnReturn } from "@/css/doneteStyles";
+import { P, H1, Input, DivInput, Span, BtnReturn } from "@/css/doneteStyles";
 
 const Donate = () => {
   const [campaign, setCampain] = useState({});
@@ -65,27 +65,27 @@ const Donate = () => {
                 <h1>Donate Crypto</h1>
                 <h2>What is the campaign ID you are looking for?</h2>
                 <Input
-                  type="number"BtnReturn
+                  type="number"
+                  BtnReturn
                   id="campaignId"
                   onChange={onChangeId}
                   value={campaign.id}
                 />
                 <Input type="button" value="Search" onClick={btnSearchClick} />
                 <BtnReturn>
-              <Link href="/">Return</Link>
-            </BtnReturn>
+                  <Link href="/">Return</Link>
+                </BtnReturn>
               </div>
               <Footer />
             </SearchDiv>
           </>
         ) : (
           <Container2>
-            <Span/>
+            <Span />
             <H1>
               Please check if this is the right campaign before finalizing your
               donation.
             </H1>
-            <hr />
             <div>
               <div>
                 {campaign.videoUrl ? (
@@ -108,11 +108,13 @@ const Donate = () => {
                   <strong>Description:</strong>
                   {campaign.description}
                 </P>
-                {campaign.videoUrl ? (
+                
+                  {campaign.videoUrl ? (
                   <P>
                     watch the video below to understand more about our campaign
                   </P>
                 ) : null}
+                 
                 <P>
                   So, what did you think of the project? It has already been
                   raised{" "}
@@ -140,11 +142,10 @@ const Donate = () => {
                 </div>
               </div>
             </div>
-             {message ? <P>{message}</P> : null}
+            {message ? <P>{message}</P> : null}
             <Footer />
           </Container2>
         )}
-       
       </Container>
     </>
   );

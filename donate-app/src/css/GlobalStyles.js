@@ -22,12 +22,16 @@ const GlobalStyles = createGlobalStyle`
   body {
     font-family: 'Arial', sans-serif;
     background: url("/kinder3.avif") no-repeat center center fixed;
-background-size: cover;
-
+    background-size: cover;
     color: #333;
+    height: 100vh;
     line-height: 1.6;
     margin: 0;
     padding: 0;
+    @media (min-width: 300px) and (max-width: 768px){
+      background: rgba(156, 197, 161, 0.5);
+      
+    }
   }
 
   a {

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Color } from "../../GlobalStyles";
+import { Color } from "./GlobalStyles";
 
 export const Footer = styled.section`
   width: 100vw;

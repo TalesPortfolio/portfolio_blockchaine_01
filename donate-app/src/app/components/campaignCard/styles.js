@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Color } from "../../../../GlobalStyles";
+import { Color } from "../../../css/GlobalStyles";
 
 
 export const Content = styled.div`
@@ -32,6 +32,17 @@ export const Content = styled.div`
     font-weight: 700;
     text-align: center;
     padding: 10px;
+  }
+
+  @media (min-width: 300px) and (max-width: 768px){
+    width: 300px !important;
+    height: 500px;
+    h2{ 
+      font-size: 1.2rem;
+    }
+    p{
+      font-size: 1rem;
+    }
   }
 `;
 

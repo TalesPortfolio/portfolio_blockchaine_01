@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Color } from "../../../../GlobalStyles";
+import { Color } from "../../../css/GlobalStyles";
 
 export const Nav = styled.nav`
 
@@ -14,6 +14,11 @@ export const Nav = styled.nav`
   );
   color: #fff;
   padding-top: 50px;
+
+  @media (min-width: 300px) and (max-width: 768px){
+    display:none;
+  }
+
 `;
 
 export const Title_img = styled.div`

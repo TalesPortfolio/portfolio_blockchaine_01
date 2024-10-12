@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Color } from "../../GlobalStyles";
+import { Color } from "./GlobalStyles";
 
 export const Container = styled.div`
   display: flex;
@@ -8,18 +8,30 @@ export const Container = styled.div`
   justify-content: space-between;
   height: 100vh;
   width: 100vw;
+  @media (min-width: 300px) and (max-width: 768px){
+    height: 100%;
+  }
 `;
 
 export const ContaineBtn = styled.div`
 display: flex;
 flex-direction:column;
-align-items: center;
-justify-content: space-between;
-height: 100vh;
+align-items: center;    width: 90vw;
+height: auto;
 div{
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+@media (min-width: 300px) and (max-width: 768px){
+  div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+
 }
 `;
 
@@ -55,6 +67,13 @@ export const Button = styled.button`
       /* Cor mais clara ou diferente no hover */ rgba(234, 243, 236, 1)
     );
   }
+  margin: 5px;
+  @media (min-width: 300px) and (max-width: 768px){
+    width: 100%;
+    margin-left: 10px;
+    margin-right: 0px;
+
+  }
 `;
 
 export const Img = styled.img`
@@ -62,7 +81,8 @@ export const Img = styled.img`
 `;
 
 export const Description = styled.div`
-padding-top: 80px;
+padding-top: 10px;
+
 `;
 
 export const H1 = styled.h1`
@@ -75,11 +95,17 @@ export const P = styled.p`
   font-size: 1.2rem;
   font-weight: 700;
   text-align: center;
+  @media (min-width: 300px) and (max-width: 768px){
+    font-size: 1rem;
+  }
 `;
 
 export const Span = styled.span`
 color: green;
 text-decoration: underline;
+@media (min-width: 300px) and (max-width: 768px){
+    font-size: 12px;
+  }
 `;
 
 export const BtnDiv = styled.div`
@@ -100,10 +126,19 @@ export const DivCard = styled.div`
     margin-bottom: 20px;
   }
 
-  @media (max-width: 768px) {
-    /* Para dispositivos móveis, ajusta para 1 card por linha */
+  @media (min-width: 300px) and (max-width: 768px) {
     > div {
-      width: 100%;
+      width: 100%; /* Cards ocupam 100% da largura em telas menores */
     }
   }
-  `;
+`;
+
+export const H2 = styled.h2`
+  color: ${Color.title};
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 10px;
+  @media (min-width: 300px) and (max-width: 768px){
+    font-size: 1.5rem;
+  }
+`;

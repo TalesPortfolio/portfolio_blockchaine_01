@@ -12,7 +12,7 @@ import {
   MessageDiv,
   BtnReturn,
 } from "../../css/campaignStyles";
-import GlobalStyles from "../../../GlobalStyles";
+import GlobalStyles from "../../css/GlobalStyles";
 
 const Campaign = () => {
   const [campaign, setCampain] = useState({});

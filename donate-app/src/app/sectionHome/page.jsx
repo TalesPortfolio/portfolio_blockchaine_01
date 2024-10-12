@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button, Container, ContaineBtn, Img, Description, BtnDiv, P, Span, DivCard } from "../../css/sectionHomeStyles";
+import { Button, Container, ContaineBtn, Img, Description, BtnDiv, P, Span, DivCard,H2 } from "../../css/sectionHomeStyles";
 import { doLogin, getLastCampaignId, getCampaign } from "@/services/Web3Service"; // Importe suas funções Web3
 import Header from "../components/header/Header";
 import Link from "next/link";
@@ -71,7 +71,8 @@ const SectionHome = () => {
         <Container>
           <Header />
           <Description>
-            <P>Welcome <Span>{wallet}</Span></P>
+            <H2>Welcome</H2>
+            <P><Span>{wallet}</Span></P>
             <P>Your decentralized donation platform.</P>
             <P>Create your campaign or donate to existing campaigns</P>
           </Description>
