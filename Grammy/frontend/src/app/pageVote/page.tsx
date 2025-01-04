@@ -53,7 +53,7 @@ export default function PageVote() {
     setActiveDiv(divNumber);
     setMessage(`Processing vote for ${singerName}...`);
     try {
-      const receipt = await addVote(divNumber); // Certifique-se de que `addVote` está funcionando.
+      await addVote(divNumber); // Certifique-se de que `addVote` está funcionando.
       setMessage(`You successfully voted for ${singerName}`);
     } catch (error) {
       if (error instanceof Error) {
