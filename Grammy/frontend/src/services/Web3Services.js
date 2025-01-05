@@ -1,8 +1,9 @@
+
 import Web3 from "web3";
 import ABI from "./ABI.json";
 
 // Endereço do contrato implantado
-const CONTRACT_ADDRESS = "0x55452e5779A5C903D8e54ACe2b4631E650BC6BF4";
+const CONTRACT_ADDRESS = "0x6c4d35f94A479e593530a0711DB186523fe6A55b";
 
 // Função para conectar a carteira do usuário usando MetaMask
 export async function doLogin() {
@@ -45,21 +46,26 @@ export async function getCurrentVoting() {
 // Função para registrar um voto na votação atual
 export async function addVote(option) {
   if (!window.ethereum) throw new Error("MetaMask is not installed.");
-
+  
   const web3 = new Web3(window.ethereum);
   const accounts = await web3.eth.requestAccounts();
   const wallet = accounts[0];
   const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS, { from: wallet });
 
   try {
-    const receipt = await contract.methods.addVote(option).send({
-      from: wallet,
-    });
-    return receipt; // Retorna o recibo da transação
+    const receipt = await contract.methods.addVote(option).send({ from: wallet });
+    return receipt; // Transação bem-sucedida
   } catch (error) {
-    throw new Error(error.message || "Failed to vote.");
+    // Captura mensagens de erro da EVM
+    if (error?.message?.includes("revert")) {
+      const errorMessage = error.message.split("revert")[1]?.trim() || "Transaction reverted";
+      throw new Error(errorMessage);
+    }
+    throw new Error(error.message || "An unexpected error occurred while voting.");
   }
 }
+
+
 
 // Função para obter os resultados da votação
 export async function getVotingResults() {

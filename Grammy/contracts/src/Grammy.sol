@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >= 0.8.18;
+pragma solidity >=0.8.18;
 
 struct Voting {
     string option1;
@@ -18,29 +18,33 @@ struct Vote {
 
 contract Grammy {
     address owner;
-    uint public currentVoting = 0;
+    uint public currentVoting = 0; // Mantém o índice da votação atual
     Voting[] public votings;
-    mapping(address => mapping(uint => Vote)) public votes; // Corrigido o mapeamento
+    mapping(address => mapping(uint => Vote)) public votes;
 
-   constructor() {
-    owner = msg.sender;
+    // Declaração única dos eventos
+    event VoteCasted(address indexed voter, uint option, uint timestamp);
+    event VotingAdded(string option1, string option2, string option3, uint maxDate);
+    event ErrorOccurred(string message);
 
-    // Criação da votação inicial no momento do deploy
-    Voting memory initialVoting;
-    initialVoting.option1 = "Taylor Swift";
-    initialVoting.option2 = "Ed Sheeran";
-    initialVoting.option3 = "Benson Boone";
-    initialVoting.maxDate = 1767225599; // Timestamp para 31/12/2025 23:59:59 UTC
-    votings.push(initialVoting);
-}
+    constructor() {
+        owner = msg.sender;
 
+        // Criação da votação inicial no momento do deploy
+        Voting memory initialVoting;
+        initialVoting.option1 = "Taylor Swift";
+        initialVoting.option2 = "Ed Sheeran";
+        initialVoting.option3 = "Benson Boone";
+        initialVoting.maxDate = 1767225599; // Timestamp para 31/12/2025 23:59:59 UTC
+        votings.push(initialVoting);
+    }
 
     // Obter a votação atual
     function getCurrentVoting() public view returns (Voting memory) {
         return votings[currentVoting];
     }
 
-    // Criar uma votação com 3 opções e um tempo para votação
+    // Criar uma nova votação
     function addVoting(
         string memory option1,
         string memory option2,
@@ -48,7 +52,12 @@ contract Grammy {
         uint timeToVote
     ) public {
         require(msg.sender == owner, "Only the owner can add a voting");
-        if (votings.length != 0) currentVoting++;
+        require(
+            block.timestamp > votings[currentVoting].maxDate,
+            "Current voting is still active"
+        );
+
+        currentVoting++; // Incrementa o índice apenas quando uma votação termina
 
         Voting memory newVoting;
         newVoting.option1 = option1;
@@ -56,6 +65,8 @@ contract Grammy {
         newVoting.option3 = option3;
         newVoting.maxDate = block.timestamp + timeToVote;
         votings.push(newVoting);
+
+        emit VotingAdded(option1, option2, option3, newVoting.maxDate);
     }
 
     // Votar em uma opção
@@ -75,5 +86,7 @@ contract Grammy {
         if (option == 1) votings[currentVoting].votes1++;
         if (option == 2) votings[currentVoting].votes2++;
         if (option == 3) votings[currentVoting].votes3++;
+
+        emit VoteCasted(msg.sender, option, block.timestamp);
     }
 }

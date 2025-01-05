@@ -82,28 +82,33 @@ export default function PageVote() {
   const handleDivClick = async (divNumber: number, singerName: string): Promise<void> => {
     setActiveDiv(divNumber);
     setMessage(`Processing vote for ${singerName}...`);
+    
     try {
       const receipt = await addVote(divNumber);
-      setMessage(`You successfully voted for ${singerName}`);
-      setHasVoted(true); // Marca como já votado
-
+      setMessage(`Your vote for ${singerName} has been successfully registered! 🎉`);
+      setHasVoted(true);
+    
       // Atualiza os resultados após o voto
       const updatedResults = await getVotingResults();
       setResults(updatedResults);
       console.log("Transaction receipt:", receipt);
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message.includes("User denied transaction signature")) {
-          setMessage("Transaction was cancelled.");
-        } else {
-          setMessage(`Failed to vote: ${error.message}`);
-        }
+    } catch (error: any) {
+      // Tratando erros com mensagens genéricas para o usuário
+      if (error?.message?.includes("You already voted")) {
+        setMessage("You have already voted! Each user can only vote once per session. 🛑");
+      } else if (error?.message?.includes("Invalid option")) {
+        setMessage("Invalid vote option selected. Please choose a valid candidate. ⚠️");
+      } else if (error?.message?.includes("Voting is closed")) {
+        setMessage("Voting for this session has closed. Thank you for your interest! ⏳");
       } else {
-        setMessage("Failed to vote.");
+        setMessage("An error occurred while processing your vote. Please try again later. ❌");
       }
+  
+      // Log completo do erro apenas no console para depuração
       console.error("Error while voting:", error);
     }
   };
+  
 
   return (
     <>
@@ -188,7 +193,22 @@ export default function PageVote() {
           </DivGraphical>
 
           <DivMsg>
-            {hasVoted && message && <p>{message}</p>}
+            {message && (
+              <div
+                style={{
+                  color: message.includes("successfully") ? "green" : "red",
+                  backgroundColor: "#f8d7da",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  marginTop: "20px",
+                  textAlign: "left",
+                  fontWeight: "bold",
+                  whiteSpace: "pre-wrap", // Permite quebrar linhas
+                }}
+              >
+                {message}
+              </div>
+            )}
           </DivMsg>
 
           {/* Exibe os resultados */}

@@ -8,7 +8,7 @@ contract DeployGrammy is Script {
     function run() external {
         // Carregar as variáveis do .env
         uint256 privateKey = vm.envUint("PRIVATE_KEY");
-        string memory rpcUrl = vm.envString("RPC_URL");
+        //string memory rpcUrl = vm.envString("RPC_URL");
 
 
         // Iniciar transmissão

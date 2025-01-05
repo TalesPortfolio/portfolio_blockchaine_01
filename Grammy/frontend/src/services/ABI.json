@@ -185,6 +185,75 @@
 		}
 	  ],
 	  "stateMutability": "view"
+	},
+	{
+	  "type": "event",
+	  "name": "ErrorOccurred",
+	  "inputs": [
+		{
+		  "name": "message",
+		  "type": "string",
+		  "indexed": false,
+		  "internalType": "string"
+		}
+	  ],
+	  "anonymous": false
+	},
+	{
+	  "type": "event",
+	  "name": "VoteCasted",
+	  "inputs": [
+		{
+		  "name": "voter",
+		  "type": "address",
+		  "indexed": true,
+		  "internalType": "address"
+		},
+		{
+		  "name": "option",
+		  "type": "uint256",
+		  "indexed": false,
+		  "internalType": "uint256"
+		},
+		{
+		  "name": "timestamp",
+		  "type": "uint256",
+		  "indexed": false,
+		  "internalType": "uint256"
+		}
+	  ],
+	  "anonymous": false
+	},
+	{
+	  "type": "event",
+	  "name": "VotingAdded",
+	  "inputs": [
+		{
+		  "name": "option1",
+		  "type": "string",
+		  "indexed": false,
+		  "internalType": "string"
+		},
+		{
+		  "name": "option2",
+		  "type": "string",
+		  "indexed": false,
+		  "internalType": "string"
+		},
+		{
+		  "name": "option3",
+		  "type": "string",
+		  "indexed": false,
+		  "internalType": "string"
+		},
+		{
+		  "name": "maxDate",
+		  "type": "uint256",
+		  "indexed": false,
+		  "internalType": "uint256"
+		}
+	  ],
+	  "anonymous": false
 	}
   ]
   
