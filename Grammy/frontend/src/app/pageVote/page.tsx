@@ -5,7 +5,12 @@ import Head from "next/head";
 import { useRouter } from "next/navigation";
 import GlobalStyle from "../../styles/GlobalStyle";
 import Card from "../../components/Cards";
-import { getCurrentVoting, addVote } from "@/services/Web3Services";
+import {
+  getCurrentVoting,
+  addVote,
+  getVotingResults,
+} from "@/services/Web3Services";
+
 import {
   MainContainer,
   Container,
@@ -20,51 +25,78 @@ import {
   DivMsg,
 } from "../../styles/pageVoteStyles";
 
+// Tipos
+type VotingData = {
+  option1: string;
+  votes1: number;
+  option2: string;
+  votes2: number;
+  option3: string;
+  votes3: number;
+  maxDate: number;
+};
+
+type ResultData = {
+  option: string;
+  votes: number;
+};
+
 export default function PageVote() {
   const { push } = useRouter();
   const [activeDiv, setActiveDiv] = useState<number | null>(null);
   const [message, setMessage] = useState<string>("");
-  const [voting, setVoting] = useState<any>(null);
+  const [voting, setVoting] = useState<VotingData | null>(null); // Consistente no SSR
   const [loading, setLoading] = useState<boolean>(false);
+  const [results, setResults] = useState<ResultData[]>([]);
+  const [hasVoted, setHasVoted] = useState<boolean>(false);
 
   useEffect(() => {
-    // Função para buscar dados de votação
-    const fetchVoting = async () => {
+    const fetchVoting = async (): Promise<void> => {
       setLoading(true);
       try {
         const result = await getCurrentVoting();
-        setVoting(result);
+        setVoting(result as VotingData);
       } catch (error) {
         if (error instanceof Error) {
-          console.error("Error fetching voting data:", error.message);
+          //console.error("Error fetching voting data:", error.message);
+          if (error.message.includes("No voting available")) {
+            setMessage("No active voting available.");
+          } else {
+            setMessage("An unexpected error occurred.");
+          }
         } else {
           console.error("Error fetching voting data:", error);
+          setMessage("An unexpected error occurred.");
         }
-        setMessage("No active voting available.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchVoting();
-  }, []); // Nenhuma dependência para garantir execução única.
+  }, []);
 
-  const handleDivClick = async (divNumber: number, singerName: string) => {
+  const handleDivClick = async (divNumber: number, singerName: string): Promise<void> => {
     setActiveDiv(divNumber);
     setMessage(`Processing vote for ${singerName}...`);
     try {
-      await addVote(divNumber); // Certifique-se de que `addVote` está funcionando.
+      const receipt = await addVote(divNumber);
       setMessage(`You successfully voted for ${singerName}`);
+      setHasVoted(true); // Marca como já votado
+      console.log("Transaction receipt:", receipt);
     } catch (error) {
       if (error instanceof Error) {
-        setMessage(`Failed to vote for ${singerName}: ${error.message}`);
+        if (error.message.includes("User denied transaction signature")) {
+          setMessage("Transaction was cancelled.");
+        } else {
+          setMessage(`Failed to vote: ${error.message}`);
+        }
       } else {
-        setMessage(`Failed to vote for ${singerName}`);
+        setMessage("Failed to vote.");
       }
+      console.error("Error while voting:", error);
     }
   };
-
-
   return (
     <>
       <Head>
@@ -147,8 +179,9 @@ export default function PageVote() {
             </div>
           </DivGraphical>
           <DivMsg>
-            <p>{message}</p>
-          </DivMsg>
+      {/* Exibe a mensagem somente se já votou */}
+      {hasVoted && message && <p>{message}</p>}
+    </DivMsg>
         </Container>
       </MainContainer>
     </>
