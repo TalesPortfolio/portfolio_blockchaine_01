@@ -45,10 +45,10 @@ export default function PageVote() {
   const { push } = useRouter();
   const [activeDiv, setActiveDiv] = useState<number | null>(null);
   const [message, setMessage] = useState<string>("");
-  const [voting, setVoting] = useState<VotingData | null>(null); // Consistente no SSR
-  const [loading, setLoading] = useState<boolean>(false);
-  const [results, setResults] = useState<ResultData[]>([]);
-  const [hasVoted, setHasVoted] = useState<boolean>(false);
+  const [voting, setVoting] = useState<VotingData | null>(null); // Dados da votação atual
+  const [loading, setLoading] = useState<boolean>(false); // Estado de carregamento
+  const [results, setResults] = useState<ResultData[]>([]); // Resultados da votação
+  const [hasVoted, setHasVoted] = useState<boolean>(false); // Se o usuário já votou
 
   useEffect(() => {
     const fetchVoting = async (): Promise<void> => {
@@ -56,9 +56,12 @@ export default function PageVote() {
       try {
         const result = await getCurrentVoting();
         setVoting(result as VotingData);
+
+        // Busca os resultados da votação ao carregar
+        const votingResults = await getVotingResults();
+        setResults(votingResults);
       } catch (error) {
         if (error instanceof Error) {
-          //console.error("Error fetching voting data:", error.message);
           if (error.message.includes("No voting available")) {
             setMessage("No active voting available.");
           } else {
@@ -83,6 +86,10 @@ export default function PageVote() {
       const receipt = await addVote(divNumber);
       setMessage(`You successfully voted for ${singerName}`);
       setHasVoted(true); // Marca como já votado
+
+      // Atualiza os resultados após o voto
+      const updatedResults = await getVotingResults();
+      setResults(updatedResults);
       console.log("Transaction receipt:", receipt);
     } catch (error) {
       if (error instanceof Error) {
@@ -97,6 +104,7 @@ export default function PageVote() {
       console.error("Error while voting:", error);
     }
   };
+
   return (
     <>
       <Head>
@@ -178,10 +186,22 @@ export default function PageVote() {
               <p>Benson Boone</p>
             </div>
           </DivGraphical>
+
           <DivMsg>
-      {/* Exibe a mensagem somente se já votou */}
-      {hasVoted && message && <p>{message}</p>}
-    </DivMsg>
+            {hasVoted && message && <p>{message}</p>}
+          </DivMsg>
+
+          {/* Exibe os resultados */}
+          <div>
+            <h3>Current Voting Results:</h3>
+            <ul>
+              {results.map((result, index) => (
+                <li key={index}>
+                  {result.option}: {result.votes} votes
+                </li>
+              ))}
+            </ul>
+          </div>
         </Container>
       </MainContainer>
     </>

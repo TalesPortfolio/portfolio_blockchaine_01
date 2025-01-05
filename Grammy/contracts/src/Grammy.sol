@@ -22,9 +22,18 @@ contract Grammy {
     Voting[] public votings;
     mapping(address => mapping(uint => Vote)) public votes; // Corrigido o mapeamento
 
-    constructor() {
-        owner = msg.sender;
-    }
+   constructor() {
+    owner = msg.sender;
+
+    // Criação da votação inicial no momento do deploy
+    Voting memory initialVoting;
+    initialVoting.option1 = "Taylor Swift";
+    initialVoting.option2 = "Ed Sheeran";
+    initialVoting.option3 = "Benson Boone";
+    initialVoting.maxDate = 1767225599; // Timestamp para 31/12/2025 23:59:59 UTC
+    votings.push(initialVoting);
+}
+
 
     // Obter a votação atual
     function getCurrentVoting() public view returns (Voting memory) {

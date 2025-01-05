@@ -1,44 +1,51 @@
-import Web3 from 'web3';
-import ABI from './ABI.json';
+import Web3 from "web3";
+import ABI from "./ABI.json";
 
+// Endereço do contrato implantado
+const CONTRACT_ADDRESS = "0x55452e5779A5C903D8e54ACe2b4631E650BC6BF4";
 
-//const CONTRACT_ADDRESS = "0xc691daeb645fd29383e5c210ff082da772de311f";
-
-const CONTRACT_ADDRESS = "0x808B5e9A89Aa0431aB90ab785071E61FC7516Dfc"
-
+// Função para conectar a carteira do usuário usando MetaMask
 export async function doLogin() {
-  // Verifica se a MetaMask está instalada
-  if (!window.ethereum) throw new Error('Please install MetaMask first.');
+  if (!window.ethereum) throw new Error("Please install MetaMask first.");
 
   try {
-    const web3 = new Web3(window.ethereum); // Inicializa o Web3
-    const accounts = await web3.eth.requestAccounts(); // Solicita as contas conectadas
+    const web3 = new Web3(window.ethereum);
+    const accounts = await web3.eth.requestAccounts();
 
-    // Verifica se há contas conectadas
-    if (!accounts || !accounts.length) throw new Error('No MetaMask account connected.');
+    if (!accounts || !accounts.length) throw new Error("No MetaMask account connected.");
 
-    // Retorna a primeira conta conectada
-    localStorage.setItem('wallet', accounts[0]); // (Opcional) Salva no localStorage
+    localStorage.setItem("wallet", accounts[0]); // Armazena a conta conectada
     return accounts[0];
   } catch (error) {
-    throw new Error(error.message || 'Failed to connect to MetaMask.');
+    throw new Error(error.message || "Failed to connect to MetaMask.");
   }
 }
 
-
+// Função para obter os dados da votação atual
 export async function getCurrentVoting() {
-  const wallet = localStorage.getItem('wallet');
-  if (!wallet) throw new Error('No wallet connected.');
+  const wallet = localStorage.getItem("wallet");
+  if (!wallet) throw new Error("No wallet connected.");
 
   const web3 = new Web3(window.ethereum);
   const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS, { from: wallet });
-  return contract.methods.getCurrentVoting().call();
 
+  const voting = await contract.methods.getCurrentVoting().call();
+
+  return {
+    option1: voting.option1,
+    votes1: Number(voting.votes1), // Converte para número
+    option2: voting.option2,
+    votes2: Number(voting.votes2),
+    option3: voting.option3,
+    votes3: Number(voting.votes3),
+    maxDate: Number(voting.maxDate),
+  };
 }
 
+// Função para registrar um voto na votação atual
 export async function addVote(option) {
   if (!window.ethereum) throw new Error("MetaMask is not installed.");
-  
+
   const web3 = new Web3(window.ethereum);
   const accounts = await web3.eth.requestAccounts();
   const wallet = accounts[0];
@@ -50,35 +57,41 @@ export async function addVote(option) {
     });
     return receipt; // Retorna o recibo da transação
   } catch (error) {
-    //console.error("Error while voting:", error.message || error);
     throw new Error(error.message || "Failed to vote.");
   }
 }
 
+// Função para obter os resultados da votação
 export async function getVotingResults() {
+  const web3 = new Web3(window.ethereum);
+  const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS);
+
   try {
     const currentVoting = await contract.methods.getCurrentVoting().call();
+
     const results = [
-      { option: currentVoting.option1, votes: currentVoting.votes1 },
-      { option: currentVoting.option2, votes: currentVoting.votes2 },
-      { option: currentVoting.option3, votes: currentVoting.votes3 },
+      { option: currentVoting.option1, votes: Number(currentVoting.votes1) }, // Converte para número
+      { option: currentVoting.option2, votes: Number(currentVoting.votes2) },
+      { option: currentVoting.option3, votes: Number(currentVoting.votes3) },
     ];
-    return results.sort((a, b) => b.votes - a.votes); // Ordena por votos decrescentes
+
+    return results.sort((a, b) => b.votes - a.votes); // Ordena por número de votos decrescente
   } catch (error) {
-    console.error("Error fetching voting results:", error.message || error);
-    throw new Error("Failed to fetch voting results.");
+    throw new Error(error.message || "Failed to fetch voting results.");
   }
 }
 
+// Função para verificar se um usuário já votou
 export async function checkIfAlreadyVoted(walletAddress) {
   const web3 = new Web3(window.ethereum);
   const contract = new web3.eth.Contract(ABI, CONTRACT_ADDRESS);
 
   try {
+    const currentVoting = await contract.methods.currentVoting().call();
     const vote = await contract.methods.votes(walletAddress, currentVoting).call();
-    return vote.date !== "0"; // Retorna true se já votou
+    return vote.date !== "0"; // Retorna `true` se já votou
   } catch (error) {
     console.error("Error checking vote status:", error);
-    return false;
+    return false; // Retorna `false` em caso de erro
   }
 }
