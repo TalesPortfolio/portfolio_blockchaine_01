@@ -2,14 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Head from "next/head";
-import { useRouter } from "next/navigation";
 import GlobalStyle from "../../styles/GlobalStyle";
 import Card from "../../components/Cards";
-import {
-  getCurrentVoting,
-  addVote,
-  getVotingResults,
-} from "@/services/Web3Services";
+import { addVote, getVotingResults } from "@/services/Web3Services";
 
 import {
   MainContainer,
@@ -26,89 +21,58 @@ import {
 } from "../../styles/pageVoteStyles";
 
 // Tipos
-type VotingData = {
-  option1: string;
-  votes1: number;
-  option2: string;
-  votes2: number;
-  option3: string;
-  votes3: number;
-  maxDate: number;
-};
-
 type ResultData = {
   option: string;
   votes: number;
 };
 
 export default function PageVote() {
-  const { push } = useRouter();
   const [activeDiv, setActiveDiv] = useState<number | null>(null);
   const [message, setMessage] = useState<string>("");
-  const [voting, setVoting] = useState<VotingData | null>(null); // Dados da votação atual
-  const [loading, setLoading] = useState<boolean>(false); // Estado de carregamento
-  const [results, setResults] = useState<ResultData[]>([]); // Resultados da votação
-  const [hasVoted, setHasVoted] = useState<boolean>(false); // Se o usuário já votou
+  const [results, setResults] = useState<ResultData[]>([]);
 
   useEffect(() => {
-    const fetchVoting = async (): Promise<void> => {
-      setLoading(true);
+    const fetchVotingResults = async (): Promise<void> => {
       try {
-        const result = await getCurrentVoting();
-        setVoting(result as VotingData);
-
-        // Busca os resultados da votação ao carregar
         const votingResults = await getVotingResults();
         setResults(votingResults);
       } catch (error) {
-        if (error instanceof Error) {
-          if (error.message.includes("No voting available")) {
-            setMessage("No active voting available.");
-          } else {
-            setMessage("An unexpected error occurred.");
-          }
-        } else {
-          console.error("Error fetching voting data:", error);
-          setMessage("An unexpected error occurred.");
-        }
-      } finally {
-        setLoading(false);
+        console.error("Error fetching voting results:", error);
+        setMessage("An unexpected error occurred while fetching results. ❌");
       }
     };
 
-    fetchVoting();
+    fetchVotingResults();
   }, []);
 
   const handleDivClick = async (divNumber: number, singerName: string): Promise<void> => {
     setActiveDiv(divNumber);
     setMessage(`Processing vote for ${singerName}...`);
-    
+
     try {
-      const receipt = await addVote(divNumber);
+      await addVote(divNumber);
       setMessage(`Your vote for ${singerName} has been successfully registered! 🎉`);
-      setHasVoted(true);
-    
+
       // Atualiza os resultados após o voto
       const updatedResults = await getVotingResults();
       setResults(updatedResults);
-      console.log("Transaction receipt:", receipt);
-    } catch (error: any) {
-      // Tratando erros com mensagens genéricas para o usuário
-      if (error?.message?.includes("You already voted")) {
-        setMessage("You have already voted! Each user can only vote once per session. 🛑");
-      } else if (error?.message?.includes("Invalid option")) {
-        setMessage("Invalid vote option selected. Please choose a valid candidate. ⚠️");
-      } else if (error?.message?.includes("Voting is closed")) {
-        setMessage("Voting for this session has closed. Thank you for your interest! ⏳");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        if (error.message.includes("You already voted")) {
+          setMessage("You have already voted! Each user can only vote once per session. 🛑");
+        } else if (error.message.includes("Invalid option")) {
+          setMessage("Invalid vote option selected. Please choose a valid candidate. ⚠️");
+        } else if (error.message.includes("Voting is closed")) {
+          setMessage("Voting for this session has closed. Thank you for your interest! ⏳");
+        } else {
+          setMessage("An error occurred while processing your vote. Please try again later. ❌");
+        }
       } else {
-        setMessage("An error occurred while processing your vote. Please try again later. ❌");
+        console.error("Unknown error occurred:", error);
+        setMessage("An unknown error occurred. Please try again later. ❌");
       }
-  
-      // Log completo do erro apenas no console para depuração
-      console.error("Error while voting:", error);
     }
   };
-  
 
   return (
     <>
@@ -117,11 +81,6 @@ export default function PageVote() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
         <link
           href="https://fonts.googleapis.com/css2?family=Diplomata&display=swap"
           rel="stylesheet"
@@ -137,7 +96,12 @@ export default function PageVote() {
             <p>Grammy Awards</p>
             <p>Best Singer</p>
             <p>2025 Edition</p>
-            <img src="/images/metamask.png" alt="metamask logo" />
+            <img
+              src="/images/metamask.png"
+              alt="metamask logo"
+              width={50}
+              height={50}
+            />
           </Nav>
         </TopHearder>
         <Container>
@@ -197,13 +161,15 @@ export default function PageVote() {
               <div
                 style={{
                   color: message.includes("successfully") ? "green" : "red",
-                  backgroundColor: "#f8d7da",
+                  backgroundColor: message.includes("successfully")
+                    ? "#d4edda"
+                    : "#f8d7da",
                   padding: "10px",
                   borderRadius: "5px",
                   marginTop: "20px",
-                  textAlign: "left",
+                  textAlign: "center",
                   fontWeight: "bold",
-                  whiteSpace: "pre-wrap", // Permite quebrar linhas
+                  whiteSpace: "pre-wrap",
                 }}
               >
                 {message}
