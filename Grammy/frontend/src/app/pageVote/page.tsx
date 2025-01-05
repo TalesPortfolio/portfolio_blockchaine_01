@@ -5,7 +5,6 @@ import Head from "next/head";
 import GlobalStyle from "../../styles/GlobalStyle";
 import Card from "../../components/Cards";
 import { addVote, getVotingResults } from "@/services/Web3Services";
-
 import {
   MainContainer,
   Container,
@@ -45,13 +44,18 @@ export default function PageVote() {
     fetchVotingResults();
   }, []);
 
-  const handleDivClick = async (divNumber: number, singerName: string): Promise<void> => {
+  const handleDivClick = async (
+    divNumber: number,
+    singerName: string
+  ): Promise<void> => {
     setActiveDiv(divNumber);
     setMessage(`Processing vote for ${singerName}...`);
 
     try {
       await addVote(divNumber);
-      setMessage(`Your vote for ${singerName} has been successfully registered! 🎉`);
+      setMessage(
+        `Your vote for ${singerName} has been successfully registered! 🎉`
+      );
 
       // Atualiza os resultados após o voto
       const updatedResults = await getVotingResults();
@@ -59,13 +63,21 @@ export default function PageVote() {
     } catch (error: unknown) {
       if (error instanceof Error) {
         if (error.message.includes("You already voted")) {
-          setMessage("You have already voted! Each user can only vote once per session. 🛑");
+          setMessage(
+            "You have already voted! Each user can only vote once per session. 🛑"
+          );
         } else if (error.message.includes("Invalid option")) {
-          setMessage("Invalid vote option selected. Please choose a valid candidate. ⚠️");
+          setMessage(
+            "Invalid vote option selected. Please choose a valid candidate. ⚠️"
+          );
         } else if (error.message.includes("Voting is closed")) {
-          setMessage("Voting for this session has closed. Thank you for your interest! ⏳");
+          setMessage(
+            "Voting for this session has closed. Thank you for your interest! ⏳"
+          );
         } else {
-          setMessage("An error occurred while processing your vote. Please try again later. ❌");
+          setMessage(
+            "An error occurred while processing your vote. Please try again later. ❌"
+          );
         }
       } else {
         console.error("Unknown error occurred:", error);
