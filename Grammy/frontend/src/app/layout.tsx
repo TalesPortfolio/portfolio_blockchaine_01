@@ -23,6 +23,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Link para fontes personalizadas */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Diplomata&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
